@@ -4,6 +4,7 @@ import tensorflow as tf
 from keras.preprocessing.image import img_to_array
 from PIL import Image
 import tkinter as tk
+from tkinter import ttk  # สำหรับการสร้าง ComboBox
 from PIL import Image, ImageTk
 import os
 
@@ -70,6 +71,30 @@ class CameraPage(tk.Frame):
         )
         self.btn_back.pack(side=tk.BOTTOM, anchor=tk.W, padx=10, pady=(10, 20))  # เพิ่ม padding บนและล่าง
 
+        
+        # สร้าง ComboBox สำหรับการเลือกกล้องและตกแต่ง
+        self.camera_selection = ttk.Combobox(
+            self,
+            values=[f"กล้อง {i}" for i in range(4)],
+            font=("Kanit", 12),
+            state="readonly"  # ทำให้เลือกได้เฉพาะค่าที่กำหนด
+        )
+        self.camera_selection.current(0)  # ตั้งค่าเริ่มต้นเป็นกล้องตัวแรก
+        self.camera_selection.place(relx=0.25, rely=0.73, anchor=tk.CENTER)  # วาง ComboBox ใต้ Label
+
+        # ตกแต่ง ComboBox
+        style = ttk.Style()
+        style.configure("TCombobox", 
+                        font=("Kanit", 12), 
+                        background="#ffffff", 
+                        foreground="#333333", 
+                        padding=5)
+        style.map("TCombobox", 
+                fieldbackground=[("readonly", "#ffffff")],  # สีพื้นหลังเมื่อเลือก
+                background=[("readonly", "#ffffff")])  # สีพื้นหลังเมื่อไม่เลือก
+
+        self.camera_selection.bind("<<ComboboxSelected>>", self.change_camera)  # เรียกเปลี่ยนกล้องเมื่อเลือก
+
         # เริ่มต้นกล้อง
         self.cap = cv2.VideoCapture(0)
         self.update_frame()
@@ -88,6 +113,13 @@ class CameraPage(tk.Frame):
 
         # เรียกซ้ำเพื่ออัปเดตเฟรมใหม่
         self.lbl_opencv.after(10, self.update_frame)
+
+    def change_camera(self, event):
+        # ปล่อยกล้องเก่าก่อน
+        self.cap.release()
+        # เลือกกล้องจาก ComboBox และเปิดกล้องใหม่
+        selected_camera_index = self.camera_selection.current()
+        self.cap = cv2.VideoCapture(selected_camera_index)
 
     def capture_and_predict(self):
         ret, frame = self.cap.read()
@@ -149,9 +181,9 @@ def getPrediction(filename):
     probability_results = category[0][answer]
 
     # ตรวจสอบหมวดหมู่
-    if answer == 0:
+    if answer == 1:
         answer = "Recycle"
-    elif answer == 1:
+    elif answer == 0:
         answer = "Organic"
     else:
         answer = "General"
