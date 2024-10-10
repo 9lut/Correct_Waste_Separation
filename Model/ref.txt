@@ -1,1 +1,3 @@
+เนื่องจากไฟล์โมเดลมีขนาดใหญ่เกินไปจึงไม่สามารถอัปโหลดทาง GitHub 
+
 https://github.com/manuelamc14/waste-classification-model
