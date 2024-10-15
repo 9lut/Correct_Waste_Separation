@@ -51,4 +51,4 @@ python main.py
 
 ## Credit Model
 ขอขอบคุณ คุณ manuelamc14 สำหรับการนำโมเดลมาใช้ในครั้งนี้
-[ลิงก์ดาวน์โหลดโมเดล](https://github.com/manuelamc14/waste-classification-model.git)
+([ลิงก์ดาวน์โหลดโมเดล](https://github.com/manuelamc14/waste-classification-model/blob/main/final_model_weights.hdf5))
